@@ -20,12 +20,12 @@ public class PaperController {
     public String list(Model model) {
         List<Paper> list = paperService.queryAllPaper();
         model.addAttribute("list", list);
-        return "allPaper";
+        return "test/allPaper";
     }
 
     @RequestMapping("toAddPaper")
     public String toAddPaper() {
-        return "addPaper";
+        return "test/addPaper";
     }
 
     @RequestMapping("/addPaper")
@@ -43,7 +43,7 @@ public class PaperController {
     @RequestMapping("toUpdatePaper")
     public String toUpdatePaper(Model model, Long id) {
         model.addAttribute("paper", paperService.queryById(id));
-        return "updatePaper";
+        return "test/updatePaper";
     }
 
     @RequestMapping("/updatePaper")
