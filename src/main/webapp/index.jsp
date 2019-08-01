@@ -50,31 +50,32 @@
 </head>
 
 <body class="easyui-layout">
+<%--顶部--%>
 <div data-options="region:'north',split:true" style="height:56px;">
     <ul>
         <li><a class="active" href="#home">网页聊天室</a></li>
         <li  style="float:right">
-            <a href="#about">username</a>
+            <a href="#about">${ sessionScope.USER_CD}</a>
         </li>
     </ul>
 </div>
-
+<%--右边--%>
 <div data-options="region:'east',title:'好友列表',split:false" style="width:180px;">
 
 </div>
-
+<%--左边--%>
 <div data-options="region:'west',title:'菜单',split:true" style="width:200px;">
     <%--左边菜单栏--%>
     <div id="westMenu" class="easyui-accordion" style="width:200px;height:auto;">
         <div title="聊天" data-options="iconCls:'icon-save',selected:true" style="overflow:auto;padding:2px;">
-            <ul id="ezMenu" class="easyui-tree">
+            <ul  id="ezMenu" class="easyui-tree">
                 <li data-options="attributes:{'url':'chat'}">
-                    <span>个人设置</span>
+                    <span>聊天</span>
                 </li>
             </ul>        </div>
         <div title="个人信息" data-options="iconCls:'icon-reload'" style="padding:2px;">
             <ul id="menu_personMsg" class="easyui-tree">
-                <li>
+                <li data-options="attributes:{'url':'pMsg'}">
                     <span>个人信息</span>
                 </li>
             </ul>
@@ -98,8 +99,8 @@
         </div>
     </div>
 </div>
-
-<div data-options="region:'center',title:'center title'" style="padding:5px;background:#eee;">
+<%--中间--%>
+<div data-options="region:'center'" style="padding:5px;background:#eee;">
     <div id="tabs" class="easyui-tabs" >
         <div title="首页" style="padding:20px;display:none;">
             首页
@@ -109,6 +110,8 @@
 </body>
 
 <script type="text/javascript">
+    <%--由于ueditor的原因，改为只显示一个界面；；；；或者查看ueditor--%>
+
     $('#ezMenu').tree({
         onClick: function(node){
             // 获取选中的标签页面板（tab panel）
@@ -126,9 +129,26 @@
                     href:node.attributes.url
                 });
             }
+        }
+    });
 
+    $('#menu_personMsg').tree({
+        onClick: function(node){
+            // 获取选中的标签页面板（tab panel）
+            var tabs = $('#tabs');
+            var tab = tabs.tabs('getTab',node.text);
 
-
+            if(tab){
+                tabs.tabs("select",node.text)
+            }else{
+                // 添加一个新的标签页面板（tab panel）
+                $('#tabs').tabs('add',{
+                    title:node.text,
+                    content:'Tab Body',
+                    closable:true,
+                    href:node.attributes.url
+                });
+            }
         }
     });
 </script>

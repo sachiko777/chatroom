@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webchat.mapper.SendMsgMapper">
+
+    <resultMap id="BaseResultMap" type="com.webchat.pojo.Messages">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="postMessage" property="postmessage" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="BIT"/>
+        <result column="postTime" property="posttime" jdbcType="TIMESTAMP"/>
+        <result column="fromUserId" property="fromuserid" jdbcType="INTEGER"/>
+        <result column="toUserId" property="touserid" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Messages_List">
+      id, postMessage, status, postTime, fromUserId, toUserId
+    </sql>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from messages
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.webchat.pojo.Messages" >
+        insert into messages (id, postMessage, status,
+          postTime, fromUserId, toUserId
+          )
+        values (#{id,jdbcType=INTEGER}, #{postmessage,jdbcType=VARCHAR}, #{status,jdbcType=BIT},
+          #{posttime,jdbcType=TIMESTAMP}, #{fromuserid,jdbcType=INTEGER}, #{touserid,jdbcType=INTEGER}
+          )
+    </insert>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from messages
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectMessageRecord" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from messages
+        where fromUserId = #{fromId,jdbcType=INTEGER} and toUserId=#{toId,jdbcType=INTEGER}
+    </select>
+
+
+</mapper>

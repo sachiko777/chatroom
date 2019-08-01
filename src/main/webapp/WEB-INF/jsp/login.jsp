@@ -23,7 +23,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-    <form action="/0430socket/login">
+    <form action="/login">
   		<input type="text" name="userCd"/>
     	<input type="submit" value="登陆"/>
     </form>

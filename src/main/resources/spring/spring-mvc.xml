@@ -1,26 +1,17 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans.xsd
-    http://www.springframework.org/schema/context
-    http://www.springframework.org/schema/context/spring-context.xsd
-    http://www.springframework.org/schema/mvc
-    http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
-    <!-- 配置SpringMVC -->
-    <!-- 1.开启SpringMVC注解模式 -->
-    <!-- 简化配置：
-        (1)自动注册DefaultAnootationHandlerMapping,AnotationMethodHandlerAdapter
-        (2)提供一些列：数据绑定，数字和日期的format @NumberFormat, @DateTimeFormat, xml,json默认读写支持
-    -->
-    <mvc:annotation-driven />
-
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <!--在cn.mccreefei包下自动扫描组件加入容器-->
+    <context:component-scan base-package="com.webchat"/>
+    <!--mvc注解支持-->
+    <mvc:annotation-driven/>
     <!-- 2.静态资源默认servlet配置
-        (1)加入对静态资源的处理：js,gif,png
-        (2)允许使用"/"做整体映射
-     -->
+           (1)加入对静态资源的处理：js,gif,png
+           (2)允许使用"/"做整体映射
+        -->
     <mvc:default-servlet-handler/>
 
     <!--freemarker的配置在前，当请求发现/WEB-INF/ftl/没有的时候，就会去/WEB-INF/jsp/查找-->
@@ -33,20 +24,24 @@
         <property name="contentType" value="text/html; charset=UTF-8"/>
     </bean>
 
-    <!-- 3.配置jsp 显示ViewResolver -->
+    <!--配置视图解析bean-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
-        <property name="prefix" value="/WEB-INF/jsp/" />
-        <property name="suffix" value=".jsp" />
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
     </bean>
 
     <mvc:resources mapping="/css/**" location="/WEB-INF/css/"/>
     <mvc:resources mapping="/js/**" location="/WEB-INF/js/"/>
 
-    <!-- 4.扫描web相关的bean -->
-    <context:component-scan base-package="com.controller" />
+    <!--配置支持文件上传bean-->
+    <!--Tomcat8以上，支持文件上传需要在context.xml中context结点属性配置allowCasualMultipartParsing="true"-->
+    <!--<bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver">-->
+    <!--&lt;!&ndash;最大内存大小&ndash;&gt;-->
+    <!--<property name="maxInMemorySize" value="4048"/>-->
+    <!--<property name="defaultEncoding" value="utf-8"/>-->
+    <!--&lt;!&ndash;上传限制大小，-1无限制&ndash;&gt;-->
+    <!--<property name="maxUploadSize" value="-1"/>-->
+    <!--</bean>-->
 
-    <!--文件上传 -->
-    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" p:defaultEncoding="UTF-8" >
-    </bean>
+
 </beans>

@@ -1,85 +1,45 @@
 <%--
   Created by IntelliJ IDEA.
   User: Ochibana
-  Date: 2019/7/23
-  Time: 17:01
+  Date: 2019/7/27
+  Time: 13:06
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
-<title>聊天框</title>
+<link rel="stylesheet" type="text/css" href="/css/webchat/chat.css">
 <script type="text/javascript" charset="utf-8" src="ueditor/ueditor.config.js"></script>
 <script type="text/javascript" charset="utf-8" src="ueditor/ueditor.all.min.js"></script>
 <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
 <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
 <script type="text/javascript" charset="utf-8" src="ueditor/lang/zh-cn/zh-cn.js"></script>
+<script src="js/sockjs.min.js"></script>
 
-<div style="padding: 10px 10px 10px 10px;">
-    <form id="productAddForm" method="post">
+<title>聊天</title>
 
-        <input type="hidden" name="categoryId">
-        <input type="hidden" name="image">
-        <input type="hidden" name="description">
-
-        <table cellpadding="10px">
-            <tr>
-                <td>商品名称:</td>
-                <td><input class="easyui-textbox" name="name" data-options="required:true" style="width:300px"></td>
-            </tr>
-            <tr>
-                <td>商品分类:</td>
-                <td><select id="cc" class="easyui-combobox" name="cid" style="width:200px;">
-                    <option value="0">请选择</option>
-
-                </select>
-                    <p id="cbox" style="display: none;"></p>
-                </td>
-            </tr>
-            <tr>
-                <td>商品价格:</td>
-                <td>
-                    <input type="text" class="easyui-numberbox" value="100" name="maketPricePreview"
-                           data-options="min:0,max:9999999,required:true,precision:2">
-                    <input type="hidden" name="maketPrice">
-                </td>
-            </tr>
-            <tr>
-                <td>市场价格:</td>
-                <td>
-                    <input type="text" class="easyui-numberbox" value="100" name="pricePreview"
-                           data-options="min:0,max:9999999,required:true,precision:2">
-                    <input type="hidden" name="price">
-                </td>
-            </tr>
-            <tr>
-                <td>商品编号:</td>
-                <td>
-                    <input name="productNumber" type="text" class="easyui-numberbox" value="100" data-options="required:true">
-                </td>
-            </tr>
-            <tr>
-                <td>商品图片:</td>
-                <td>
-                    <input id="fileName" name="uploadfile" />
-                    <a id="btn" href="#" class="easyui-linkbutton uploadPic">上传图片</a>
-                </td>
-            </tr>
-            <tr>
-                <td>商品预览:</td>
-                <td>
-                    <img src="" id="product_img" width="376" height="190">
-                </td>
-            </tr>
-            <tr>
-                <td>商品描述:</td>
-                <td><script id="editor" type="text/plain" style="width:600px;height:300px;">测试 test</script></td>
-            </tr>
-        </table>
-    </form>
-
-    <div align="center">
-        <a id="submitBtn" href="#" class="easyui-linkbutton" onclick="submitForm()">提交</a>
-        <a id="resetBtn" href="#" class="easyui-linkbutton">重置</a>
+<div class="talk_con">
+    <%--顶栏信息--%>
+    <div class="talk_banner">
+        ceshi
+    </div>
+    <%--聊天记录框--%>
+    <div class="talk_show" id="historyMsg">
+        <div class="atalk">sachiko<br/><span id="asay">吃饭了吗？</span></div>
+        <div class="btalk">ochibana<br/><span id="bsay">还没呢，你呢？</span></div>
+    </div>
+    <div class="talk_btn">
+        <form id="sendMsgForm" enctype="multipart/form-data" method="post">
+            <a id="emoji" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">emoji</a>
+            <a id="clearBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">清屏</a>
+            <%--<a id="sendBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">发送</a>--%>
+            <a id="submitBtn" href="#" class="easyui-linkbutton" onclick="submitForm()">发送</a>
+            <input name="postmessage" type="hidden" />
+            <input name="fromuserid" type="hidden" />
+            <input name="touserid" type="hidden" />
+        </form>
+    </div>
+    <%--富文本编辑器--%>
+    <div class="talk_input">
+        <textarea id="container" style="height: 180px; width: 580px;"></textarea>
     </div>
 </div>
 
@@ -88,22 +48,156 @@
     $(function () {
         //实例化编辑器
         //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
-        var ue = UE.getEditor('editor');
-        // MALL.init();
+        var ue = UE.getEditor("container", {
+            toolbars: [['simpleupload','insertimage','|','bold','italic']]
+            //autoFloatEnabled:false
+        });
+        var userCd = "3";
+        if( userCd != null && userCd != "null") {
+            // alert("登录成功");
+            // 登录成功后，建立websocket连接
+            connect();
+        }
     });
 
-    // function submitForm () {
-    //     //UE.getEditor('editor').getContent();//获得ueditor内容
-    //     $("#productAddForm").find("input[name='description']").val(UE.getEditor('editor').getContent());
-    //     $("#productAddForm").find("input[name='price']").val(eval($("#productAddForm").find("input[name='pricePreview']").val())*100);
-    //     $("#productAddForm").find("input[name='maketPrice']").val(eval($("#productAddForm").find("input[name='maketPricePreview']").val())*100);
-    //
-    //     $.post("/product_save", $("#productAddForm").serialize(),function (data) {
-    //         if(data.status == 200){
-    //             $.messager.alert('提示','成功添加商品');
-    //         }
-    //     });
-    // }
+    function submitForm () {
+        debugger
+        var console=$('#historyMsg')[0];
+        var words=UE.getEditor('container').getContent();
+        words=words.replace("<p>","");
+        words=words.replace("</p>","");//去除p标签
+        var str = "";
+        if(words.value == ""){
+            // 消息为空时弹窗
+            alert("消息不能为空");
+            return;
+        }
 
+        removeContent();//清空编辑器
+        $("#sendMsgForm").find("input[name='postmessage']").val(words);
+        $("#sendMsgForm").find("input[name='touserid']").val('ochibana');
+        $("#sendMsgForm").find("input[name='fromuserid']").val('sachiko');
+        // $.ajax({
+        //     url:'/chat/message',
+        //     type:'post',
+        //     contentType:'application/json;charset=utf-8',
+        //     data:json,
+        //     dataType:'json',
+        //     success:function (data) {
+        //         str = '<div class="btalk">username<br/><span>' + words +'</span></div>';
+        //         console.innerHTML =  $('#historyMsg')[0].innerHTML + str;
+        //         //只显示25条消息记录
+        //         while (console.childNodes.length > 25) {
+        //             console.removeChild(console.firstChild);
+        //         }
+        //         console.scrollTop = console.scrollHeight;
+        //     },
+        //     error:function () {
+        //         $.messager.alert('提示','消息发送失败！');
+        //     }
+        // });
+
+        $.post("/chat/test", $("#sendMsgForm").serialize(),function (data) {
+            if(data.success){
+                str = '<div class="btalk">username<br/><span>' + words +'</span></div>';
+                console.innerHTML =  $('#historyMsg')[0].innerHTML + str;
+                //只显示25条消息记录
+                while (console.childNodes.length > 25) {
+                    console.removeChild(console.firstChild);
+                }
+                console.scrollTop = console.scrollHeight;
+            }else{
+                $.messager.alert('提示','消息发送失败！');
+            }
+        });
+    }
+
+    function removeContent(isAppendTo) {
+        var arr = [];
+        UE.getEditor('container').setContent('', isAppendTo);
+    }
+
+    <%--window.onload = function() {--%>
+        <%--//var userCd = "<%=request.getSession().getAttribute("USER_CD") %>";--%>
+        <%--var userCd = "3";--%>
+        <%--if( userCd != null && userCd != "null") {--%>
+            <%--// alert("登录成功");--%>
+            <%--// 登录成功后，建立websocket连接--%>
+            <%--connect();--%>
+        <%--}--%>
+    <%--}--%>
+
+    var ws = null;
+    // var target = 'ws://localhost:8080/ssm1228/myHandler';
+    // var target = 'ws://localhost:8080/ws';
+    // var target = 'ws://' + window.location.host + '/ws';
+
+    // 创建WebSocket连接
+    function connect() {
+        debugger
+        var target = 'ws://' + window.location.host + '/ws';
+        // WebSocket适配
+        if ('WebSocket' in window) {
+            ws = new WebSocket(target);
+        } else if ('MozWebSocket' in window) {
+            alert(11);
+            ws = new MozWebSocket(target);
+        } else {
+            // ie10以下
+            if(ws==null) {
+                // target = window.location.protocol + '//' + 'localhost:8080/ssm1228/sockjs/myHandler';
+                target = window.location.protocol + '//' + 'localhost:8080/ws/sockjs';
+                ws = new SockJS(target);
+            }
+        }
+        // 注入连接事件
+        ws.onopen = function () {
+            log('连接已建立。');
+        };
+        // 注入消息事件
+        ws.onmessage = function (event) {
+            log('新消息：' + event.data);
+        };
+        // 注入断开事件
+        ws.onclose = function (event) {
+            log('连接已断开。');
+        };
+    }
+
+    // 断开连接
+    function disconnect() {
+        if (ws != null) {
+            ws.close();
+            ws = null;
+        }
+    }
+
+    // 发送消息
+    function echo() {
+        if (ws != null) {
+            log('Sent: ' + message);
+            ws.send(message);
+        } else {
+            alert('connection not established, please connect.');
+        }
+    }
+
+    // 打印消息
+    function log(message) {
+        debugger
+        var console =$('#historyMsg')[0];
+        //var console = window.frames['main'].contentWindow.document.getElementById('console');
+        str = '<div class="atalk">username<br/><span>' + message +'</span></div>';
+        console.innerHTML = console.innerHTML + str;
+
+        while (console.childNodes.length > 25) {
+            console.removeChild(console.firstChild);
+        }
+        console.scrollTop = console.scrollHeight;
+    }
 
 </script>
+
+
+
+

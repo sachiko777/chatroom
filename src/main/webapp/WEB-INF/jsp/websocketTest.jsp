@@ -9,7 +9,8 @@
   </head>
   
   <body>
-    <form action="/ssm1228/tt">
+    <form action="/tt">
+        <input type="text" id="msg" name="msg" />
     	<input type="submit" value="发送信息"/>
     </form>
     <br>
