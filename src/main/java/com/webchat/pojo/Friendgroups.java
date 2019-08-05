@@ -8,6 +8,7 @@ public class Friendgroups {
 
     private Integer userid;//用户id
 
+
     public Integer getId() {
         return id;
     }

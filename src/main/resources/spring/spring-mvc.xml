@@ -14,6 +14,24 @@
         -->
     <mvc:default-servlet-handler/>
 
+    <!-- 配置拦截器 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!-- 拦截所有mvc控制器 -->
+            <mvc:mapping path="/**"/>
+            <!--放过地址-->
+            <mvc:exclude-mapping path="/chat/login" />
+            <mvc:exclude-mapping path="/js/jquery/*" />
+            <mvc:exclude-mapping path="/css/themes/*" />
+            <mvc:exclude-mapping path="/css/themes/default/*" />
+            <!-- mvc:exclude-mapping是另外一种拦截，它可以在你后来的测试中对某个页面进行不拦截，这样就不用在
+                LoginInterceptor的preHandler方法里面获取不拦截的请求uri地址了(优选) -->
+            <mvc:exclude-mapping path="/" />
+            <bean class="com.webchat.intercepter.LoginInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+
     <!--freemarker的配置在前，当请求发现/WEB-INF/ftl/没有的时候，就会去/WEB-INF/jsp/查找-->
     <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
         <property name="templateLoaderPath" value="/WEB-INF/ftl/"/>

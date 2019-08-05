@@ -21,7 +21,7 @@
     <input name="password" class="easyui-passwordbox" prompt="请输入密码" iconWidth="28" data-options="iconCls:'icon-lock'"
            style="width:300px;height:34px;padding:10px">
 </form>
-<a id="submitBtn" href="#" class="easyui-linkbutton" onclick="submitForm()">发送</a>
+<a id="submitBtn" href="#" class="easyui-linkbutton" onclick="submitForm()">登录</a>
 </body>
 
 <script type="text/javascript">
@@ -30,6 +30,8 @@
             if(data.success){
                 // $.messager.alert('提示','成功添加商品');
                 window.location.href='index.jsp';
+            }else {
+                $.messager.alert("登录失败！");
             }
         });
     }

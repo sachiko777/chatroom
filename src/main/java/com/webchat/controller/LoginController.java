@@ -52,11 +52,9 @@ public class LoginController {
 				if(check!=null){//判断数据库中是否存在该用户
 					if(!StringUtils.isEmpty(password)&&password.equals(check.getPassword())){//判断密码是否匹配
 						// 正确:将userCd存入session
-						request.getSession().setAttribute("USER_CD", userId);
-						request.getSession().setAttribute("USER_NAME", check.getNickname());
-						//在线人数
-
-
+						request.getSession().setAttribute("USER_ID", check.getId());//用户id
+						request.getSession().setAttribute("USER_CD", userId);//用户账号
+						request.getSession().setAttribute("USER_NAME", check.getNickname());//用户姓名
 						obj.setSuccess(true);
 						obj.setData("登录成功！");
 						return obj;

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webchat.mapper.FriendMapper">
+
+
+    <sql id="Friend_List">
+        id, firendID, userID, nickName, friendGroupID,friendAccount
+    </sql>
+
+    <sql id="FriendGroups_List">
+        id, name, userID
+    </sql>
+
+    <select id="queryFriendById" resultType="com.webchat.pojo.Friends" parameterType="java.lang.Short">
+        SELECT
+        <include refid="Friend_List" />
+        FROM friends
+        WHERE userId = #{userId,jdbcType=INTEGER}
+    </select>
+
+    <select id="queryFriendByGroupId" resultType="com.webchat.pojo.Friends" parameterType="java.lang.Short">
+        SELECT
+        <include refid="Friend_List" />
+        FROM friends
+        WHERE friendGroupID = #{gid,jdbcType=INTEGER}
+    </select>
+
+    <select id="queryFriendGroupsByUserId" resultType="com.webchat.pojo.Friendgroups" parameterType="java.lang.Short">
+        SELECT
+        <include refid="FriendGroups_List" />
+        FROM friendgroups
+        WHERE userID = #{userId,jdbcType=INTEGER}
+    </select>
+
+
+</mapper>

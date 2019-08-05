@@ -23,57 +23,48 @@
 
         <table cellpadding="10px">
             <tr>
-                <td>商品名称:</td>
+                <td>昵称:</td>
                 <td><input class="easyui-textbox" name="name" data-options="required:true" style="width:300px"></td>
             </tr>
             <tr>
-                <td>商品分类:</td>
-                <td><select id="cc" class="easyui-combobox" name="cid" style="width:200px;">
-                    <option value="0">请选择</option>
+                <td>性别:</td>
+                <td>
+                    <select id="sexBox" class="easyui-combobox" name="cid" style="width:200px;">
+                        <option value="0">男</option>
+                        <option value="1">女</option>
+                        <option value="2">未知</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>更改密码:</td>
+                <td>
 
-                </select>
-                    <p id="cbox" style="display: none;"></p>
                 </td>
             </tr>
             <tr>
-                <td>商品价格:</td>
+                <td>生日:</td>
                 <td>
-                    <input type="text" class="easyui-numberbox" value="100" name="maketPricePreview"
-                           data-options="min:0,max:9999999,required:true,precision:2">
-                    <input type="hidden" name="maketPrice">
+                    <input id="birthday" type="text" class="easyui-datebox" required="required">
                 </td>
             </tr>
             <tr>
-                <td>市场价格:</td>
-                <td>
-                    <input type="text" class="easyui-numberbox" value="100" name="pricePreview"
-                           data-options="min:0,max:9999999,required:true,precision:2">
-                    <input type="hidden" name="price">
-                </td>
-            </tr>
-            <tr>
-                <td>商品编号:</td>
-                <td>
-                    <input name="productNumber" type="text" class="easyui-numberbox" value="100" data-options="required:true">
-                </td>
-            </tr>
-            <tr>
-                <td>商品图片:</td>
+                <td>头像:</td>
                 <td>
                     <input id="fileName" name="uploadfile" />
                     <a id="btn" href="#" class="easyui-linkbutton uploadPic">上传图片</a>
                 </td>
             </tr>
             <tr>
-                <td>商品预览:</td>
+                <td>头像预览:</td>
                 <td>
                     <img src="" id="product_img" width="376" height="190">
                 </td>
             </tr>
-            <tr>
-                <td>商品描述:</td>
-                <td><script id="editor" type="text/plain" style="width:600px;height:300px;">测试 test</script></td>
-            </tr>
+            <%--<tr>--%>
+                <%--<td>个人描述:</td>--%>
+                <%--<td><script id="editor" type="text/plain" style="width:600px;height:300px;">测试 test</script></td>--%>
+            <%--</tr>--%>
         </table>
     </form>
 

@@ -10,6 +10,8 @@ public class Friends {
 
     private String nickname;//好友备注
 
+    private String friendAccount;//好友账号
+
     private Integer friendgroupid;//好友所在分组id
 
     public Integer getId() {
@@ -50,5 +52,14 @@ public class Friends {
 
     public void setFriendgroupid(Integer friendgroupid) {
         this.friendgroupid = friendgroupid;
+    }
+
+
+    public String getFriendAccount() {
+        return friendAccount;
+    }
+
+    public void setFriendAccount(String friendAccount) {
+        this.friendAccount = friendAccount;
     }
 }

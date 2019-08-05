@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.webchat.mapper.UserMapper" >
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webchat.mapper.UserMapper">
     <resultMap id="BaseResultMap" type="com.webchat.pojo.UserNew" >
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="userId" property="userid" jdbcType="VARCHAR" />
@@ -20,7 +22,7 @@
         SELECT
         <include refid="Base_Column_List" />
         FROM user_new
-        WHERE userId = #{userId,jdbcType=INTEGER}
+        WHERE userId = #{userId,jdbcType=VARCHAR}
     </select>
 
 

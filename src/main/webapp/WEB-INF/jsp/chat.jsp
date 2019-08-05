@@ -61,7 +61,6 @@
     });
 
     function submitForm () {
-        debugger
         var console=$('#historyMsg')[0];
         var words=UE.getEditor('container').getContent();
         words=words.replace("<p>","");
@@ -74,8 +73,10 @@
         }
 
         removeContent();//清空编辑器
+        var friendId='<%= session.getAttribute("FRIEND_ID")%>';
+        debugger
         $("#sendMsgForm").find("input[name='postmessage']").val(words);
-        $("#sendMsgForm").find("input[name='touserid']").val('ochibana');
+        $("#sendMsgForm").find("input[name='touserid']").val(friendId);
         $("#sendMsgForm").find("input[name='fromuserid']").val('sachiko');
         // $.ajax({
         //     url:'/chat/message',
@@ -92,6 +93,7 @@
         //         }
         //         console.scrollTop = console.scrollHeight;
         //     },
+
         //     error:function () {
         //         $.messager.alert('提示','消息发送失败！');
         //     }
@@ -134,7 +136,6 @@
 
     // 创建WebSocket连接
     function connect() {
-        debugger
         var target = 'ws://' + window.location.host + '/ws';
         // WebSocket适配
         if ('WebSocket' in window) {
@@ -184,7 +185,7 @@
 
     // 打印消息
     function log(message) {
-        debugger
+        // debugger
         var console =$('#historyMsg')[0];
         //var console = window.frames['main'].contentWindow.document.getElementById('console');
         str = '<div class="atalk">username<br/><span>' + message +'</span></div>';
@@ -195,6 +196,18 @@
         }
         console.scrollTop = console.scrollHeight;
     }
+
+    //使用正则表达式获取url中的参数
+    function getUrlParam(name) {
+        //构造一个含有目标参数的正则表达式对象
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        //匹配目标参数
+        var r = window.location.search.substr(1).match(reg);
+        //返回参数值
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
 
 </script>
 

@@ -11,7 +11,7 @@
         <result column="toUserId" property="touserid" jdbcType="INTEGER"/>
     </resultMap>
 
-    <sql id="Messages_List">
+    <sql id="Base_Column_List">
       id, postMessage, status, postTime, fromUserId, toUserId
     </sql>
 
